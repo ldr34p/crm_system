@@ -1,0 +1,105 @@
+<form [formGroup]="form" (ngSubmit)="onRegister()" novalidate>
+  <h2>Company</h2>
+
+  <div>
+    <label>Company name</label>
+    <input type="text" formControlName="companyName">
+    <small *ngIf="isInvalid(form.get('companyName'))">
+      Company name is required (2-30 characters).
+    </small>
+  </div>
+
+  <div>
+    <label>Company code</label>
+    <input type="text" formControlName="companyCode" placeholder="Numbers only">
+    <small *ngIf="isInvalid(form.get('companyCode'))">
+      Company code must contain numbers only.
+    </small>
+  </div>
+
+  <div>
+    <label>VAT registration code</label>
+    <input type="text" formControlName="vatCode" placeholder="LT123456789 or 123456789">
+    <small *ngIf="isInvalid(form.get('vatCode'))">
+      VAT code must be numbers only or start with LT followed by numbers.
+    </small>
+  </div>
+
+  <div>
+    <label>Address</label>
+    <input type="text" formControlName="address">
+  </div>
+
+  <div>
+    <label>Email address</label>
+    <input type="email" formControlName="email">
+    <small *ngIf="isInvalid(form.get('email'))">
+      Enter a valid email (required).
+    </small>
+  </div>
+
+  <div>
+    <label>Phone number</label>
+    <input
+      type="text"
+      formControlName="phone"
+      placeholder="+37065312345"
+    />
+    <small *ngIf="form.get('phone')?.errors?.['phoneLt'] && (form.get('phone')?.touched || form.get('phone')?.dirty)">
+      Phone must look like +37065312345 and be 10-12 characters.
+    </small>
+  </div>
+
+  <hr>
+
+  <h2>Contacts</h2>
+
+  <div formArrayName="contacts">
+    <div
+      *ngFor="let c of contacts.controls; let i = index"
+      [formGroupName]="i"
+      style="padding: 12px; border: 1px solid #ddd; margin-bottom: 12px;">
+      <h3>Contact #{{ i + 1 }}</h3>
+
+      <div>
+        <label>First name</label>
+        <input type="text" formControlName="firstName">
+        <small *ngIf="isInvalid(c.get('firstName'))">
+          First name is required.
+        </small>
+      </div>
+
+      <div>
+        <label>Last name</label>
+        <input type="text" formControlName="lastName">
+        <small *ngIf="isInvalid(c.get('lastName'))">
+          Last name is required.
+        </small>
+      </div>
+
+      <div>
+        <label>Position</label>
+        <input type="text" formControlName="position">
+      </div>
+
+      <div>
+        <label>Phone number</label>
+        <input type="text" formControlName="phone" placeholder="+37065312345">
+        <small *ngIf="c.get('phone')?.errors?.['phoneLt'] && (c.get('phone')?.touched || c.get('phone')?.dirty)">
+          Phone must look like +37065312345 and be 10-12 characters.
+        </small>
+      </div>
+
+      <button type="button" (click)="removeContact(i)" [disabled]="contacts.length === 1">
+        Remove contact
+      </button>
+    </div>
+  </div>
+
+  <button type="button" (click)="addContact()">Add contact</button>
+
+  <hr>
+
+  <button type="submit">Register</button>
+</form>
+
