@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {
-  AbstractControl,
+AbstractControl,
   FormArray,
   FormBuilder,
   FormControl,
@@ -10,6 +10,7 @@ import {
   Validators
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { CompaniesService } from '../services/companies-service';
 
 @Component({
   selector: 'app-company-form',
@@ -21,7 +22,7 @@ import { CommonModule } from '@angular/common';
 export class CompanyFormComponent {
   form: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, public companiesService: CompaniesService) {
     this.form = this.fb.group({
       companyName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
       companyCode: ['', [this.optionalPattern(/^\d+$/)]], 
@@ -83,7 +84,13 @@ export class CompanyFormComponent {
       return;
     }
 
+    const payload = {
+      ...this.form.value,
+      createdAt: Date.now(),
+    };
+
     console.log('REGISTER PAYLOAD:', this.form.value);
+    this.companiesService.addCompany(payload);
   }
 
   isInvalid(control: AbstractControl | null): boolean {

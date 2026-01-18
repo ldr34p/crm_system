@@ -101,5 +101,34 @@
   <hr>
 
   <button type="submit">Register</button>
+
+  <div class="banner loading" *ngIf="companiesService.loading">Loading...</div>
+  <div class="banner error" *ngIf="companiesService.error">{{ companiesService.error }}</div>
+  <div class="banner success" *ngIf="companiesService.success">{{ companiesService.success }}</div>
+
+  <hr />
+
+  <h2>Saved Companies</h2>
+
+  <div *ngIf="!companiesService.loading && companiesService.companies.length === 0">
+    No companies saved yet.
+  </div>
+
+  <div class="card" *ngFor="let c of companiesService.companies">
+    <div class="title">{{ c.companyName }} <span class="muted">({{ c.id }})</span></div>
+    <div><b>Email:</b> {{ c.email }}</div>
+    <div *ngIf="c.phone"><b>Phone:</b> {{ c.phone }}</div>
+    <div *ngIf="c.address"><b>Address:</b> {{ c.address }}</div>
+
+    <div class="contacts">
+      <div class="subtitle">Contacts</div>
+      <div *ngFor="let p of c.contacts">
+        {{ p.firstName }} {{ p.lastName }}
+        <span class="muted" *ngIf="p.position">— {{ p.position }}</span>
+        <span class="muted" *ngIf="p.phone">— {{ p.phone }}</span>
+      </div>
+    </div>
+  </div>
+
 </form>
 
